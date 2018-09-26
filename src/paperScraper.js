@@ -8,11 +8,12 @@ const URL = config.baseUrl + 'evaluate'
 
 const ATTRIBUTES = [
   'Id', 'Ti', 'L', 'Y', 'D', 'CC', 'ECC', 'RId', 'W', 'E', // paper
-  'AA.AuN', 'AA.AuId', 'AA.AfId', 'AA.AfN', 'AA.S', // author
+  'AA.AuN', 'AA.DAuN', 'AA.AuId', 'AA.AfId', 'AA.AfN', 'AA.S', // author
   'F.FId', // field
   'J.JId', // jounrnal
   'C.CId' // conference
 ]
+
 
 /**
  * 
@@ -21,7 +22,53 @@ const ATTRIBUTES = [
 class PaperScraper extends Scraper {
   constructor () {
     super()
+    this.collection = config.db.collection('Paper')
   }
+
+  /**
+   * Edit and augment paper object
+   * @param {Object} paper 
+   */
+  editPaper (paper) {
+    delete paper.logprob
+    paper._key = String(paper.Id)
+
+    // if no authors, create empty author list
+    if (!('AA' in paper)) paper.AA = []
+    // if no reference key, create empty ref list
+    if (!('RId' in paper)) paper.RId = []
+
+    // jsonify Extended metadata
+    if ('E' in paper) paper.E = JSON.parse(paper.E)
+
+    // either update updateDate or insert createDate
+    const date = new Date().getTime()
+    if ('createDate' in paper) paper.updateDate = date
+    else paper.createDate = date
+  }
+
+  /**
+   * Decides to either insert or update in the db
+   * depending on whether the doc already exists or not
+   * @param {Object} doc 
+   */
+  async savePapers (papers) {
+    try {
+      // update all papers that it finds already exist
+      const res = await this.collection.bulkUpdate(papers)
+      const newPapers = res.filter((e, i) => {
+        // errorNum 1202 is document not found
+        if (e.error && errorNum === 1202)
+          return papers[i]
+      })
+      // insert new papers
+      return this.collection.import(newPapers, { type: 'documents' })
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
+  
 
 
   scrape (start, end, { step = 1, initialOffset = 0, limit = Infinity } = {}) {
@@ -44,10 +91,9 @@ class PaperScraper extends Scraper {
 
       this.query(qs, URL)
       .then(res => {
+        // emit array of papers
         const papers = res.entities
-        for (const paper of papers) {
-          this.emit('rawPaper', paper)
-        }
+        this.emit('rawPaper', papers)
 
         // if returned papers array is less than MAX_COUNT, ran out of papers for that year
         // finished querying this year
