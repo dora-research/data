@@ -11,8 +11,9 @@ const URL = config.baseUrl + 'evaluate'
  * Anything that can be scraped by ID.
  */
 class IdScraper extends Scraper {
-  constructor (attributes) {
+  constructor (collectionName, attributes) {
     super()
+    this.collection = config.db.collection(collectionName)
     this.attributes = attributes
   }
 
@@ -28,8 +29,20 @@ class IdScraper extends Scraper {
     else entity.createDate = date
   }
 
-  scrape (id, attributes) {
+  async saveEntity (entity) {
+    try {
+      const exists = await this.collection.documentExists(entity._key)
+      if (exists) { // update
+        return await this.collection.update(entity._key, entity)
+      } else { // save new doc
+        return await this.collection.save(entity)
+      }  
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
 
+  scrape (id, attributes) {
     const qs = this.constructQs(`Id=${id}`, attributes.join(','))
 
     this.query(qs, URL)
@@ -39,13 +52,14 @@ class IdScraper extends Scraper {
 
       const entity = res.entities[0]
       this.emit('update', entity)
-
     })
     .catch(err => {
       console.log(err)
       process.exit()
     })
 
+    // return a promise that resolves in x seconds
+    // so user knows when to scrape again
     return Promise ((resolve, reject) => {
       setTimeout(() => {
         resolve()

@@ -7,13 +7,10 @@ const ATTRIBUTES = [
   'FC.FN', 'FC.FId' // child field
 ]
 
-const fieldScraper = new IdScraper(ATTRIBUTES)
+const fieldScraper = new IdScraper('FieldOfStudy', ATTRIBUTES)
+
 
 const db = config.db
-const fieldOfStudyCollection = db.collection('FieldOfStudy')
-
-
-
 const initialDate = 1538623908609
 
 async function getPapersChunk (createDate) {
@@ -28,25 +25,18 @@ async function getPapersChunk (createDate) {
 }
 
 function editField (field) {
+  // overwrite any defaults that already exist in the queried field
+  const base = { Id: null, FN: null, DFN: null, CC: null, ECC: null, FL: null, FP: [], FC: [] }
+  field = Object.assign(base, field)
   return field
 }
 
-fieldScraper.on('update', field => {
+fieldScraper.on('update', async field => {
   // clean up document to be inserted
-  field = fieldScraper.editEntity(field)
-  field = editField(field)
+  fieldScraper.editEntity(field)
+  editField(field)
 
-  const exists = await fieldOfStudyCollection.documentExists(field._key)
-  if (exists) {
-    // update
-    fieldOfStudyCollection.update(field._key, field)
-    console.log('updating', field)
-  } else {
-    // if not, save a new doc
-    fieldOfStudyCollection.save(field)
-    console.log('saving', field)
-  }
-
+  fieldScraper.saveEntity(field)
 })
 
 

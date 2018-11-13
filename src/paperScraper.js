@@ -33,19 +33,6 @@ class PaperScraper extends Scraper {
     delete paper.logprob
     paper._key = String(paper.Id)
 
-    // if no authors, create empty author list
-    if (!('AA' in paper)) paper.AA = []
-    // if no reference key, create empty ref list
-    if (!('RId' in paper)) paper.RId = []
-    // if no fields, create empty fields list
-    if (!('F' in paper)) paper.F = []
-    // if no W (words from title and abstract), create empty words list
-    if (!('W' in paper)) paper.W = []
-    // if no C (conference), create empty C obj
-    if (!('C' in paper)) paper.C = {}
-    // if no J (journal), create empty C obj
-    if (!('J' in paper)) paper.J = {}
-
     // jsonify Extended metadata
     if ('E' in paper) paper.E = JSON.parse(paper.E)
 
@@ -53,6 +40,17 @@ class PaperScraper extends Scraper {
     const date = new Date().getTime()
     if ('createDate' in paper) paper.updateDate = date
     else paper.createDate = date
+
+    // overwrite any defaults that already exist in the queried paper
+    const base = { Id: null, Ti: null, L: null, Y: null, D: null, CC: null, ECC: null, RId: {}, W: [],
+      E: { ANF: [], BT: null, BV: null, DN: null, DOI: null, FP: null, I: null, CC: {},
+        IA: { IndexLength: null, InvertedIndex: {} },
+        LP: null, PB: null, PR: [], S: [], V: null, VFN: null, VSN: null
+      },
+      AA: [], D: [], J: { JId: null }, C: { CId: null }
+    }
+    
+    paper = Object.assign(base, paper)
   }
 
   /**
