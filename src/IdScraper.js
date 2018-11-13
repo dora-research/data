@@ -7,12 +7,13 @@ const URL = config.baseUrl + 'evaluate'
 
 
 /**
- * Used for affiliations, journals, conferences
+ * Used for fields, affiliations, journals, conferences
  * Anything that can be scraped by ID.
  */
 class IdScraper extends Scraper {
-  constructor () {
+  constructor (attributes) {
     super()
+    this.attributes = attributes
   }
 
   editEntity (entity) {
@@ -27,30 +28,32 @@ class IdScraper extends Scraper {
     else entity.createDate = date
   }
 
-  scrape (id) {
-    const loop = () => {
+  scrape (id, attributes) {
 
-      const qs = this.constructQs(`Id=${id}`, ATTRIBUTES.join(','))
+    const qs = this.constructQs(`Id=${id}`, attributes.join(','))
 
-      this.query(qs, URL)
-      .then(res => {
-        if (res.entities.length > 1)
-          throw new Error(`returned entities list has more than 1 entity\n${res.entities}`)
+    this.query(qs, URL)
+    .then(res => {
+      if (res.entities.length > 1)
+        throw new Error(`returned entities list has more than 1 entity\n${res.entities}`)
 
-        const entity = res.entities[0]
-        this.emit('update', entity)
+      const entity = res.entities[0]
+      this.emit('update', entity)
 
-      })
-      .catch(err => {
-        console.log(err)
-        process.exit()
-      })
+    })
+    .catch(err => {
+      console.log(err)
+      process.exit()
+    })
 
-      this.emit('readyForNext')
-    }
+    return Promise ((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, PAUSE)
+    })
 
-    setTimeout(loop, PAUSE)
   }
+
 }
 
 module.exports = IdScraper

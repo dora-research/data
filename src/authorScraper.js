@@ -21,11 +21,12 @@ class AuthorScraper {
       Id: AA.AuId,
       AuN: AA.AuN,
       DAuN: AA.DAuN,
+      AfId: AA.AdId,
       derivedCC: existingCitations + paper.CC
     }
 
     const date = new Date().getTime()
-    // author already exists, just updating derived citationc count and others
+    // author already exists, just updating derived citation count and others
     if (existingCitations) author.updateDate = date
     else author.createDate = date
 

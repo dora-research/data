@@ -7,6 +7,8 @@ const config = require('../config')
 
 const TIMEOUT = 60000 // in millis, 1 min
 
+// TODO: add a jobQueue
+
 /**
  * Scraper base class
  */
@@ -23,20 +25,20 @@ class Scraper extends EventEmitter {
   async query (qs, url) {
     // send get request
     try {
-      return request.get(url, { qs, headers: config.headers, json: true })
+      return await request.get(url, { qs, headers: config.headers, json: true })
     } catch (err) {
       throw new Error(err)
     }
   }
 
-  constructQs (expr, attributes = '', { count = 1, offset = 0, timeout = TIMEOUT, orderby = 'logprob:desc' }) {
+  constructQs (expr, attributes = '', { count = 1, offset = 0, timeout = TIMEOUT, orderby = '' }) {
     return {
       expr,
       attributes,
       count,
       offset,
-      orderby,
-      timeout
+      timeout,
+      orderby
     }
   }
 

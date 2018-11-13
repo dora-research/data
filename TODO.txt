@@ -1,0 +1,4 @@
+- create job queue in scrapers
+- standardize structure of entity documents. should all have the same fields
+- start writing foxx scripts
+- should be way to loop through all papers in Paper collection
