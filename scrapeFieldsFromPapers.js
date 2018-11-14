@@ -47,6 +47,7 @@ function main (createDate) {
       if (!paper.F) continue
       for (const field of paper.F) {
         // scrape it now, decide whether to udpate or save later
+        // await bc it lets us know when we're ready to query again
         await fieldScraper.scrape(String(field.FId), ATTRIBUTES)
       }
     }

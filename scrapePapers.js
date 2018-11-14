@@ -91,9 +91,8 @@ paperScraper.on('rawPaper', papers => {
 
 })
 
-paperScraper.scrape(2017, 2014, {
-  limit: 400000,
-  constantOffset: 100000,
+paperScraper.scrape(2013, 2012, {
+  limit: 2000,
   step: -1
 })
 

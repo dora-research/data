@@ -3,7 +3,7 @@ const Scraper = require('./Scraper')
 const config = require('../config')
 
 const MAX_COUNT = 1000 // api max is 1000
-const PAUSE = 20000 // in millis
+const PAUSE = 3000 // in millis
 const URL = config.baseUrl + 'evaluate'
 
 const ATTRIBUTES = [
@@ -22,7 +22,7 @@ const ATTRIBUTES = [
 class PaperScraper extends Scraper {
   constructor () {
     super()
-    this.collection = config.db.collection('Paper')
+    this.collection = config.db.collection('TestPaper')
   }
 
   /**
@@ -125,7 +125,9 @@ class PaperScraper extends Scraper {
       // the number of queries we've made has bumped up against our limit
       // finished querying this year
       // step to next year
+      console.log('offset', offset)
       if (offset === limit) {
+        console.log(year, end)
         if (year === end) this.stop()
         year += step
         offset = constantOffset
