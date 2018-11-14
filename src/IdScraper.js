@@ -27,6 +27,8 @@ class IdScraper extends Scraper {
     const date = new Date().getTime()
     if ('createDate' in entity) entity.updateDate = date
     else entity.createDate = date
+
+    return entity
   }
 
   async saveEntity (entity) {

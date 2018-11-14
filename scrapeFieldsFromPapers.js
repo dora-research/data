@@ -33,8 +33,8 @@ function editField (field) {
 
 fieldScraper.on('update', async field => {
   // clean up document to be inserted
-  fieldScraper.editEntity(field)
-  editField(field)
+  field = fieldScraper.editEntity(field)
+  field = editField(field)
 
   fieldScraper.saveEntity(field)
 })

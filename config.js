@@ -1,7 +1,7 @@
 const Database = require('arangojs').Database
 
-const db = new Database('http://ec2-13-56-188-174.us-west-1.compute.amazonaws.com:8529')
-db.useDatabase('dora')
+const db = new Database('http://localhost:8529')
+db.useDatabase('')
 db.useBasicAuth('', '')
 
 module.exports = {

@@ -51,6 +51,7 @@ class PaperScraper extends Scraper {
     }
     
     paper = Object.assign(base, paper)
+    return paper
   }
 
   /**
@@ -59,6 +60,9 @@ class PaperScraper extends Scraper {
    * @param {Object} doc 
    */
   async savePapers (papers) {
+    for (const e of papers) {
+      console.log(e)
+    }
     try {
       // update all papers that it finds already exist
       const res = await this.collection.bulkUpdate(papers)
@@ -125,9 +129,7 @@ class PaperScraper extends Scraper {
       // the number of queries we've made has bumped up against our limit
       // finished querying this year
       // step to next year
-      console.log('offset', offset)
       if (offset === limit) {
-        console.log(year, end)
         if (year === end) this.stop()
         year += step
         offset = constantOffset

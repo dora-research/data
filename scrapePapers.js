@@ -8,7 +8,7 @@ const authorScraper = require('./src/authorScraper')
  */
 function dealWithPapers (papers) {
   // augment/edit raw papers
-  papers.forEach(e => paperScraper.editPaper(e))
+  papers = papers.map(e => paperScraper.editPaper(e))
   // save main paper
 
 
