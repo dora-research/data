@@ -3,7 +3,7 @@ const Scraper = require('./Scraper')
 const config = require('../config')
 
 const MAX_COUNT = 1000 // api max is 1000
-const PAUSE = 3000 // in millis
+const PAUSE = 20000 // in millis
 const URL = config.baseUrl + 'evaluate'
 
 const ATTRIBUTES = [
