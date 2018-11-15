@@ -1,4 +1,4 @@
-const paperCountScraper = require('./src/paperCountScraper')
+const paperCountScraper = require('../src/paperCountScraper')
 
 
 

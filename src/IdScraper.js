@@ -62,7 +62,7 @@ class IdScraper extends Scraper {
 
     // return a promise that resolves in x seconds
     // so user knows when to scrape again
-    return Promise ((resolve, reject) => {
+    return new Promise ((resolve, reject) => {
       setTimeout(() => {
         resolve()
       }, PAUSE)

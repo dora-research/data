@@ -22,7 +22,7 @@ const ATTRIBUTES = [
 class PaperScraper extends Scraper {
   constructor () {
     super()
-    this.collection = config.db.collection('TestPaper')
+    this.collection = config.db.collection('PaperDev')
   }
 
   /**
@@ -41,16 +41,6 @@ class PaperScraper extends Scraper {
     if ('createDate' in paper) paper.updateDate = date
     else paper.createDate = date
 
-    // overwrite any defaults that already exist in the queried paper
-    const base = { Id: null, Ti: null, L: null, Y: null, D: null, CC: null, ECC: null, RId: {}, W: [],
-      E: { ANF: [], BT: null, BV: null, DN: null, DOI: null, FP: null, I: null, CC: {},
-        IA: { IndexLength: null, InvertedIndex: {} },
-        LP: null, PB: null, PR: [], S: [], V: null, VFN: null, VSN: null
-      },
-      AA: [], D: [], J: { JId: null }, C: { CId: null }
-    }
-    
-    paper = Object.assign(base, paper)
     return paper
   }
 
@@ -60,9 +50,6 @@ class PaperScraper extends Scraper {
    * @param {Object} doc 
    */
   async savePapers (papers) {
-    for (const e of papers) {
-      console.log(e)
-    }
     try {
       // update all papers that it finds already exist
       const res = await this.collection.bulkUpdate(papers)
@@ -106,7 +93,7 @@ class PaperScraper extends Scraper {
       .then(res => {
         // emit array of papers
         const papers = res.entities
-        this.emit('rawPaper', papers)
+        this.emit('rawPapers', papers)
 
         // if returned papers array is less than MAX_COUNT, ran out of papers for that year
         // finished querying this year

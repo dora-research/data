@@ -59,3 +59,39 @@ class AuthorScraper {
 }
 
 module.exports = new AuthorScraper()
+
+
+
+
+// function dealWithAuthor (paper) {
+//   async function func (AA, paper) {
+//     try {
+//       let author
+//       const doc = await authorScraper.collection.document(AA.AuId, true)
+//       if (doc) {
+//         const existingAuthor = doc
+//         author = authorScraper.buildAuthor(AA, paper, existingAuthor.CC)
+
+//         // update in db
+//         authorScraper.collection.update(author._key, author)
+//       } else {
+//         author = authorScraper.buildAuthor(AA, paper)
+
+//         // save new author to db
+//         authorScraper.collection.save(author)
+//       }
+
+
+//     } catch (err) {
+//       throw new Error('error occurred in author saving')
+//     }
+//   }
+
+//   for (const e of paper.AA) {
+//     func(e, paper)
+//     .catch(err => {
+//       console.log(err)
+//       process.exit()
+//     })
+//   }
+// }

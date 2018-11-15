@@ -31,7 +31,7 @@ class Scraper extends EventEmitter {
     }
   }
 
-  constructQs (expr, attributes = '', { count = 1, offset = 0, timeout = TIMEOUT, orderby = '' }) {
+  constructQs (expr, attributes = '', { count = 1, offset = 0, timeout = TIMEOUT, orderby = '' } = {}) {
     return {
       expr,
       attributes,

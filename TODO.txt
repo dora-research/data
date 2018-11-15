@@ -2,3 +2,4 @@
 - standardize structure of entity documents. should all have the same fields
 - start writing foxx scripts
 - should be way to loop through all papers in Paper collection
+- improve querying by taking union of all fields across all papers
