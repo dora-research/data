@@ -33,9 +33,6 @@ class PaperScraper extends Scraper {
     delete paper.logprob
     paper._key = String(paper.Id)
 
-    // jsonify Extended metadata
-    if ('E' in paper) paper.E = JSON.parse(paper.E)
-
     // either update updateDate or insert createDate
     const date = new Date().getTime()
     if ('createDate' in paper) paper.updateDate = date
@@ -66,7 +63,7 @@ class PaperScraper extends Scraper {
     }
   }
 
-  
+
 
 
   scrape (start, end, { step = 1, initialOffset = 0, constantOffset = 0, limit = Infinity } = {}) {

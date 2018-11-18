@@ -21,9 +21,6 @@ class IdScraper extends Scraper {
     delete entity.logprob
     entity._key = String(entity.Id)
 
-    // jsonify Extended metadata
-    if ('E' in entity) entity.E = JSON.parse(entity.E)
-
     const date = new Date().getTime()
     if ('createDate' in entity) entity.updateDate = date
     else entity.createDate = date

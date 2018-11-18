@@ -1,6 +1,9 @@
 
 class Paper {
   constructor (rawPaper) {
+    // jsonify Extended metadata
+    if ('E' in rawPaper) rawPaper.E = JSON.parse(rawPaper.E)
+
     this.rawPaper = rawPaper
   }
 

@@ -8,7 +8,7 @@ const ATTRIBUTES = [
   'FC.FN', 'FC.FId' // child field
 ]
 
-const fieldScraper = new IdScraper('TestField', ATTRIBUTES)
+const fieldScraper = new IdScraper('Field', ATTRIBUTES)
 
 
 const db = config.db
